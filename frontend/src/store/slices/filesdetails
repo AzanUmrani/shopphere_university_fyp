@@ -1,0 +1,54 @@
+details o files in migrate context to redux toolkit
+
+
+for cart system:
+
+
+1. cartslice
+2. addtocartbutton
+3. cartDropdown
+4. cartPage 
+5. cartContext  (not working) 
+6. cartPage.context  (not working)
+7. index.ts
+
+
+for become a creator system:
+
+1. cratorOnboarding.slice.ts
+2. CreatorOnboadingPage.tsx
+3. onBoarding.types.ts
+4. onBoardingFields.tsx
+5. Step1
+6. Step2
+7. Step3
+8. Step4
+9. Step5
+10. index.ts
+
+for theme system:
+
+1. themeSlice.ts
+2. themeToggle.tsx
+3. app.tsx
+4. index.ts
+
+for toast system:
+
+1. toastSlice.ts
+2. toastContainer.tsx
+3. CreatorSettings.tsx
+4. index.ts
+5. ProfilePage.tsx
+
+
+for webSocket system:
+
+1. index.ts
+2. socketSLice.tsx
+3. chatComponent.tsx
+4. useWebSocket.ts
+5. webSocket.ts
+6. SocketMiddleware.ts
+7. chatRoom.tsx
+8. App.tsx

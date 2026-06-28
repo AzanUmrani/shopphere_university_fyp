@@ -1,0 +1,456 @@
+import type { Product, Category, User } from "../types";
+
+export const mockCategories: Category[] = [
+  {
+    id: "1",
+    name: "Electronics",
+    slug: "electronics",
+    image:
+      "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&h=300&fit=crop",
+    description: "Latest gadgets and electronic devices",
+    subcategories: [
+      {
+        id: "1-1",
+        name: "Smartphones",
+        slug: "smartphones",
+        image:
+          "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop",
+        parentId: "1",
+      },
+      {
+        id: "1-2",
+        name: "Laptops",
+        slug: "laptops",
+        image:
+          "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop",
+        parentId: "1",
+      },
+      {
+        id: "1-3",
+        name: "Headphones",
+        slug: "headphones",
+        image:
+          "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop",
+        parentId: "1",
+      },
+    ],
+  },
+  {
+    id: "2",
+    name: "Fashion",
+    slug: "fashion",
+    image:
+      "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=300&fit=crop",
+    description: "Trendy clothing and accessories",
+    subcategories: [
+      {
+        id: "2-1",
+        name: "Men's Clothing",
+        slug: "mens-clothing",
+        image:
+          "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop",
+        parentId: "2",
+      },
+      {
+        id: "2-2",
+        name: "Women's Clothing",
+        slug: "womens-clothing",
+        image:
+          "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&h=300&fit=crop",
+        parentId: "2",
+      },
+      {
+        id: "2-3",
+        name: "Shoes",
+        slug: "shoes",
+        image:
+          "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=300&fit=crop",
+        parentId: "2",
+      },
+    ],
+  },
+  {
+    id: "3",
+    name: "Home & Garden",
+    slug: "home-garden",
+    image:
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
+    description: "Everything for your home and garden",
+    subcategories: [
+      {
+        id: "3-1",
+        name: "Furniture",
+        slug: "furniture",
+        image:
+          "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop",
+        parentId: "3",
+      },
+      {
+        id: "3-2",
+        name: "Decor",
+        slug: "decor",
+        image:
+          "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop",
+        parentId: "3",
+      },
+    ],
+  },
+  {
+    id: "4",
+    name: "Sports & Outdoors",
+    slug: "sports-outdoors",
+    image:
+      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop",
+    description: "Sports equipment and outdoor gear",
+  },
+];
+
+export const mockProducts: Product[] = [
+  {
+    id: "1",
+    name: "iPhone 15 Pro Max",
+    description:
+      "The latest iPhone with A17 Pro chip, titanium design, and advanced camera system. Experience the future of mobile technology.",
+    price: 1199,
+    originalPrice: 1299,
+    image:
+      "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=500&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=500&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=500&h=500&fit=crop",
+    ],
+    category: "Electronics",
+    subcategory: "Smartphones",
+    brand: "Apple",
+    rating: 4.8,
+    reviewCount: 1247,
+    inStock: true,
+    stockQuantity: 45,
+    tags: ["smartphone", "apple", "premium", "latest"],
+    features: [
+      "A17 Pro chip",
+      '6.7" Super Retina XDR display',
+      "Pro camera system",
+      "5G connectivity",
+    ],
+    specifications: {
+      Display: '6.7" Super Retina XDR',
+      Chip: "A17 Pro",
+      Storage: "128GB",
+      Camera: "48MP Main, 12MP Ultra Wide",
+      Battery: "Up to 29 hours video playback",
+    },
+    discount: 8,
+    isNew: true,
+    isFeatured: true,
+    createdAt: "2024-01-15T10:00:00Z",
+    updatedAt: "2024-01-15T10:00:00Z",
+  },
+  {
+    id: "2",
+    name: 'MacBook Pro 16"',
+    description:
+      "Powerful laptop with M3 Pro chip, stunning Liquid Retina XDR display, and all-day battery life.",
+    price: 2499,
+    image:
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&h=500&fit=crop",
+    ],
+    category: "Electronics",
+    subcategory: "Laptops",
+    brand: "Apple",
+    rating: 4.7,
+    reviewCount: 892,
+    inStock: true,
+    stockQuantity: 23,
+    tags: ["laptop", "apple", "professional", "performance"],
+    features: [
+      "M3 Pro chip",
+      '16" Liquid Retina XDR',
+      "Up to 22 hours battery",
+      "Advanced thermal design",
+    ],
+    specifications: {
+      Display: '16.2" Liquid Retina XDR',
+      Chip: "Apple M3 Pro",
+      Memory: "18GB unified memory",
+      Storage: "512GB SSD",
+      Ports: "3x Thunderbolt 4, HDMI, SD card",
+    },
+    isFeatured: true,
+    createdAt: "2024-01-10T09:00:00Z",
+    updatedAt: "2024-01-10T09:00:00Z",
+  },
+  {
+    id: "3",
+    name: "Sony WH-1000XM5",
+    description:
+      "Industry-leading noise canceling headphones with exceptional sound quality and 30-hour battery life.",
+    price: 399,
+    originalPrice: 449,
+    image:
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=500&h=500&fit=crop",
+    ],
+    category: "Electronics",
+    subcategory: "Headphones",
+    brand: "Sony",
+    rating: 4.6,
+    reviewCount: 2156,
+    inStock: true,
+    stockQuantity: 67,
+    tags: ["headphones", "wireless", "noise-canceling", "premium"],
+    features: [
+      "Industry-leading noise canceling",
+      "30-hour battery",
+      "Quick charge",
+      "Multipoint connection",
+    ],
+    specifications: {
+      Type: "Over-ear wireless",
+      Driver: "30mm",
+      "Frequency Response": "4Hz-40kHz",
+      Battery: "30 hours with NC",
+      Weight: "250g",
+    },
+    discount: 11,
+    isFeatured: true,
+    createdAt: "2024-01-05T14:30:00Z",
+    updatedAt: "2024-01-05T14:30:00Z",
+  },
+  {
+    id: "4",
+    name: "Nike Air Max 270",
+    description:
+      "Comfortable and stylish sneakers with Air Max technology for all-day comfort and modern street style.",
+    price: 150,
+    image:
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500&h=500&fit=crop",
+    ],
+    category: "Fashion",
+    subcategory: "Shoes",
+    brand: "Nike",
+    rating: 4.4,
+    reviewCount: 1834,
+    inStock: true,
+    stockQuantity: 156,
+    tags: ["shoes", "sneakers", "sport", "casual"],
+    features: [
+      "Air Max technology",
+      "Breathable mesh upper",
+      "Comfortable fit",
+      "Durable rubber outsole",
+    ],
+    specifications: {
+      Upper: "Mesh and synthetic",
+      Midsole: "Air Max unit",
+      Outsole: "Rubber",
+      Weight: "310g (size 9)",
+    },
+    createdAt: "2024-01-01T08:00:00Z",
+    updatedAt: "2024-01-01T08:00:00Z",
+  },
+  {
+    id: "5",
+    name: "Modern Minimalist Sofa",
+    description:
+      "Contemporary 3-seater sofa with clean lines, premium fabric upholstery, and solid wood frame.",
+    price: 899,
+    originalPrice: 1199,
+    image:
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&h=500&fit=crop",
+    ],
+    category: "Home & Garden",
+    subcategory: "Furniture",
+    brand: "Modern Living",
+    rating: 4.5,
+    reviewCount: 324,
+    inStock: true,
+    stockQuantity: 12,
+    tags: ["furniture", "sofa", "modern", "living-room"],
+    features: [
+      "Solid wood frame",
+      "Premium fabric",
+      "Easy assembly",
+      "Stain resistant",
+    ],
+    specifications: {
+      Dimensions: 'W: 84" D: 36" H: 32"',
+      Material: "Solid oak frame",
+      Upholstery: "Premium linen blend",
+      Weight: "85 lbs",
+      Capacity: "3 people",
+    },
+    discount: 25,
+    isNew: true,
+    createdAt: "2023-12-20T11:00:00Z",
+    updatedAt: "2023-12-20T11:00:00Z",
+  },
+  {
+    id: "6",
+    name: "Classic Denim Jacket",
+    description:
+      "Timeless denim jacket made from premium cotton denim with vintage wash and comfortable fit.",
+    price: 89,
+    image:
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500&h=500&fit=crop",
+    ],
+    category: "Fashion",
+    subcategory: "Men's Clothing",
+    brand: "Vintage Co.",
+    rating: 4.3,
+    reviewCount: 567,
+    inStock: true,
+    stockQuantity: 89,
+    tags: ["jacket", "denim", "casual", "vintage"],
+    features: [
+      "100% cotton denim",
+      "Vintage wash",
+      "Classic fit",
+      "Button closure",
+    ],
+    specifications: {
+      Material: "100% cotton denim",
+      Fit: "Regular",
+      Care: "Machine wash cold",
+      Origin: "Made in USA",
+    },
+    createdAt: "2023-12-15T16:45:00Z",
+    updatedAt: "2023-12-15T16:45:00Z",
+  },
+  {
+    id: "7",
+    name: "Professional Tennis Racket",
+    description:
+      "High-performance tennis racket designed for advanced players with carbon fiber frame and perfect balance.",
+    price: 299,
+    image:
+      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=500&fit=crop",
+    ],
+    category: "Sports & Outdoors",
+    brand: "ProTennis",
+    rating: 4.7,
+    reviewCount: 234,
+    inStock: true,
+    stockQuantity: 34,
+    tags: ["tennis", "sport", "professional", "carbon-fiber"],
+    features: [
+      "Carbon fiber frame",
+      "Perfect balance",
+      "Professional grade",
+      "Shock absorption",
+    ],
+    specifications: {
+      Weight: "300g unstrung",
+      "Head Size": "100 sq inches",
+      "String Pattern": "16x19",
+      Balance: "320mm",
+      Frame: "Carbon fiber",
+    },
+    isNew: true,
+    createdAt: "2023-12-10T13:20:00Z",
+    updatedAt: "2023-12-10T13:20:00Z",
+  },
+  {
+    id: "8",
+    name: "Elegant Evening Dress",
+    description:
+      "Sophisticated evening dress perfect for special occasions with flowing silhouette and premium fabric.",
+    price: 249,
+    originalPrice: 329,
+    image:
+      "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1445205170230-053b83016050?w=500&h=500&fit=crop",
+    ],
+    category: "Fashion",
+    subcategory: "Women's Clothing",
+    brand: "Elegance",
+    rating: 4.6,
+    reviewCount: 456,
+    inStock: true,
+    stockQuantity: 28,
+    tags: ["dress", "evening", "elegant", "formal"],
+    features: [
+      "Premium fabric",
+      "Flowing silhouette",
+      "Perfect for occasions",
+      "Comfortable fit",
+    ],
+    specifications: {
+      Material: "Silk blend",
+      Length: "Midi",
+      Fit: "A-line",
+      Care: "Dry clean only",
+      Lining: "Fully lined",
+    },
+    discount: 24,
+    isFeatured: true,
+    createdAt: "2023-12-05T12:00:00Z",
+    updatedAt: "2023-12-05T12:00:00Z",
+  },
+];
+
+export const mockUser: User = {
+  id: "user-1",
+  email: "john.doe@example.com",
+  firstName: "John",
+  lastName: "Doe",
+  avatar:
+    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+  phone: "+1 (555) 123-4567",
+  addresses: [
+    {
+      id: "addr-1",
+      type: "shipping",
+      firstName: "John",
+      lastName: "Doe",
+      street: "123 Main Street",
+      city: "New York",
+      state: "NY",
+      zipCode: "10001",
+      country: "United States",
+      phone: "+1 (555) 123-4567",
+      isDefault: true,
+    },
+    {
+      id: "addr-2",
+      type: "billing",
+      firstName: "John",
+      lastName: "Doe",
+      street: "456 Business Ave",
+      city: "New York",
+      state: "NY",
+      zipCode: "10002",
+      country: "United States",
+      isDefault: false,
+    },
+  ],
+  preferences: {
+    newsletter: true,
+    smsNotifications: false,
+    emailNotifications: true,
+    theme: "light",
+    currency: "USD",
+    language: "en",
+  },
+  createdAt: "2023-01-15T10:00:00Z",
+  updatedAt: "2024-01-15T10:00:00Z",
+};

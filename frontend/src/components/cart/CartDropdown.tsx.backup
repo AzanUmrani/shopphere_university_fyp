@@ -1,0 +1,414 @@
+import React, { useState, useRef, useEffect } from "react";
+import { useCart } from "../../contexts/CartContext";
+
+const CartDropdown: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Get cart context with enhanced error handling
+  let cartContextValue;
+  try {
+    cartContextValue = useCart();
+  } catch (error) {
+    console.error("Error accessing cart context:", error);
+    // Log more details about the error
+    console.error("Error type:", typeof error);
+    console.error("Error string:", String(error));
+    console.error("Error details:", JSON.stringify(error, null, 2));
+    
+    return (
+      <div className="relative">
+        <button
+          className="relative p-2 text-gray-700 hover:text-blue-600 transition-colors duration-200"
+          aria-label="Shopping cart (error)"
+          disabled
+          title="Cart is currently unavailable"
+        >
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4m.6 5l-1 5h10l1-5M9 19.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM20.5 19.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+            />
+          </svg>
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-medium">!</span>
+        </button>
+      </div>
+    );
+  }
+
+  // Validate that we have the expected methods
+  if (!cartContextValue || typeof cartContextValue !== 'object') {
+    console.error("Cart context value is invalid:", cartContextValue);
+    return (
+      <div className="relative">
+        <button
+          className="relative p-2 text-gray-700 hover:text-blue-600 transition-colors duration-200"
+          aria-label="Shopping cart (invalid context)"
+          disabled
+          title="Cart context is invalid"
+        >
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4m.6 5l-1 5h10l1-5M9 19.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM20.5 19.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+            />
+          </svg>
+          <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-medium">?</span>
+        </button>
+      </div>
+    );
+  }
+
+  // Safely destructure cart context with additional checks
+  let state, updateCartItem, removeFromCart, clearCart;
+  try {
+    ({ state, updateCartItem, removeFromCart, clearCart } = cartContextValue);
+    
+    // Validate that the methods exist
+    if (typeof updateCartItem !== 'function' || 
+        typeof removeFromCart !== 'function' || 
+        typeof clearCart !== 'function') {
+      console.error("Cart context methods are invalid:", {
+        updateCartItem: typeof updateCartItem,
+        removeFromCart: typeof removeFromCart,
+        clearCart: typeof clearCart
+      });
+      throw new Error("Invalid cart context methods");
+    }
+  } catch (error) {
+    console.error("Error destructuring cart context:", error);
+    return (
+      <div className="relative">
+        <button
+          className="relative p-2 text-gray-700 hover:text-blue-600 transition-colors duration-200"
+          aria-label="Shopping cart (context error)"
+          disabled
+          title="Cart context error"
+        >
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4m.6 5l-1 5h10l1-5M9 19.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+            />
+          </svg>
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-medium">!</span>
+        </button>
+      </div>
+    );
+  }
+
+  // Ensure state exists and has expected structure with enhanced error handling
+  let safeState;
+  try {
+    safeState = {
+      cart: {
+        id: state?.cart?.id || null,
+        items: Array.isArray(state?.cart?.items) ? state.cart.items : [],
+        totalAmount: typeof state?.cart?.totalAmount === 'number' ? state.cart.totalAmount : 0,
+        itemCount: typeof state?.cart?.itemCount === 'number' ? state.cart.itemCount : 0,
+      },
+      loading: Boolean(state?.loading),
+      error: state?.error || null,
+    };
+    
+    console.log("Cart safe state created:", safeState);
+  } catch (error) {
+    console.error("Error creating safe state:", error);
+    safeState = {
+      cart: {
+        id: null,
+        items: [],
+        totalAmount: 0,
+        itemCount: 0,
+      },
+      loading: false,
+      error: "Error processing cart data",
+    };
+  }
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleQuantityChange = async (itemId: string, newQuantity: number) => {
+    try {
+      if (newQuantity <= 0) {
+        await removeFromCart(itemId);
+      } else {
+        await updateCartItem(itemId, newQuantity);
+      }
+    } catch (error) {
+      console.error("Error updating cart item quantity:", error);
+      // Don't re-throw the error to prevent UI crashes
+    }
+  };
+
+  const handleClearCart = async () => {
+    try {
+      if (window.confirm("Are you sure you want to clear your cart?")) {
+        await clearCart();
+      }
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+      // Don't re-throw the error to prevent UI crashes
+    }
+  };
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      {/* Cart Icon Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="relative p-2 text-gray-700 hover:text-blue-600 transition-colors duration-200"
+        aria-label="Shopping cart"
+      >
+        <svg
+          className="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4m.6 5l-1 5h10l1-5M9 19.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM20.5 19.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+          />
+        </svg>
+
+        {/* Cart count badge */}
+        {safeState.cart.itemCount > 0 && (
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+            {safeState.cart.itemCount}
+          </span>
+        )}
+      </button>
+
+      {/* Dropdown Panel */}
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+          {/* Header */}
+          <div className="px-4 py-3 border-b border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Shopping Cart
+            </h3>
+            {safeState.cart.items.length > 0 && (
+              <p className="text-sm text-gray-500">
+                {safeState.cart.itemCount}{" "}
+                {safeState.cart.itemCount === 1 ? "item" : "items"}
+              </p>
+            )}
+          </div>
+
+          {/* Cart Items */}
+          <div className="max-h-96 overflow-y-auto">
+            {safeState.loading ? (
+              <div className="px-4 py-8 text-center text-gray-500">
+                Loading...
+              </div>
+            ) : safeState.cart.items.length === 0 ? (
+              <div className="px-4 py-8 text-center text-gray-500">
+                <svg
+                  className="h-12 w-12 mx-auto mb-2 text-gray-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1}
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m.6 5l-1 5h10l1-5M9 19.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM20.5 19.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+                  />
+                </svg>
+                <p>Your cart is empty</p>
+              </div>
+            ) : (
+              <div className="px-2 py-2">
+                {safeState.cart.items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg"
+                  >
+                    {/* Product Image */}
+                    <div className="flex-shrink-0 w-12 h-12">
+                      {item.product.images.length > 0 ? (
+                        <img
+                          src={item.product.images[0].url}
+                          alt={item.product.images[0].alt}
+                          className="w-full h-full object-cover rounded-md"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-200 rounded-md flex items-center justify-center">
+                          <span className="text-gray-400 text-xs">
+                            No image
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Product Info */}
+                    <div className="flex-grow min-w-0">
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {item.product.name}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        ${item.product.price.toFixed(2)}
+                      </p>
+                    </div>
+
+                    {/* Quantity Controls */}
+                    <div className="flex items-center space-x-1">
+                      <button
+                        onClick={() =>
+                          handleQuantityChange(item.id, item.quantity - 1)
+                        }
+                        className="p-1 text-gray-400 hover:text-gray-600 rounded"
+                        aria-label="Decrease quantity"
+                      >
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M20 12H4"
+                          />
+                        </svg>
+                      </button>
+                      <span className="text-sm font-medium w-8 text-center">
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() =>
+                          handleQuantityChange(item.id, item.quantity + 1)
+                        }
+                        className="p-1 text-gray-400 hover:text-gray-600 rounded"
+                        aria-label="Increase quantity"
+                      >
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                    {/* Remove Button */}
+                    <button
+                      onClick={() => removeFromCart(item.id)}
+                      className="p-1 text-gray-400 hover:text-red-500 transition-colors duration-200"
+                      aria-label="Remove item"
+                    >
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Footer */}
+          {state.cart.items.length > 0 && (
+            <div className="px-4 py-3 border-t border-gray-200">
+              {/* Total */}
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-sm font-medium text-gray-900">
+                  Total:
+                </span>
+                <span className="text-lg font-bold text-gray-900">
+                  ${state.cart.totalAmount.toFixed(2)}
+                </span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-2">
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    // Navigate to cart page - you can implement this based on your routing
+                    window.location.href = "/cart";
+                  }}
+                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium"
+                >
+                  View Cart
+                </button>
+                <button
+                  onClick={handleClearCart}
+                  className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors duration-200 font-medium"
+                >
+                  Clear Cart
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Error Message */}
+          {state.error && (
+            <div className="px-4 py-2 bg-red-50 border-t border-red-200">
+              <p className="text-sm text-red-600">{state.error}</p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CartDropdown;

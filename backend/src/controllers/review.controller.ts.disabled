@@ -1,0 +1,411 @@
+import { Request, Response } from 'express';
+// import { Review, Product, User, Order, OrderItem } from '../models';
+import { Product, User, Order, OrderItem } from '../models';
+import { AuthenticatedRequest } from '../types';
+import { Op } from 'sequelize';
+
+export const createReview = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { productId, rating, title, comment, images, orderId } = req.body;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    // Validate rating
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ message: 'Rating must be between 1 and 5' });
+    }
+
+    // Check if product exists
+    const product = await Product.findByPk(productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Check if user has purchased this product (verified review)
+    let isVerifiedPurchase = false;
+    if (orderId) {
+      const orderItem = await OrderItem.findOne({
+        where: { productId },
+        include: [
+          {
+            model: Order,
+            where: {
+              userId,
+              id: orderId,
+              status: { [Op.in]: ['delivered', 'completed'] }
+            }
+          }
+        ]
+      });
+      isVerifiedPurchase = !!orderItem;
+    }
+
+    // Check if user already reviewed this product
+    const existingReview = await Review.findOne({
+      where: { userId, productId }
+    });
+
+    if (existingReview) {
+      return res.status(400).json({ message: 'You have already reviewed this product' });
+    }
+
+    // Create review
+    const review = await Review.create({
+      userId,
+      productId,
+      orderId: orderId || null,
+      rating,
+      title: title || null,
+      content: comment || title || 'Review',
+      comment: comment || null,
+      images: images || [],
+      isVerifiedPurchase,
+      status: 'pending' // Reviews need moderation
+    });
+
+    // Get full review with user info
+    const fullReview = await Review.findByPk(review.id, {
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'firstName', 'lastName', 'avatar']
+        },
+        {
+          model: Product,
+          attributes: ['id', 'title', 'images']
+        }
+      ]
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: 'Review submitted successfully and is pending approval',
+      data: fullReview
+    });
+  } catch (error) {
+    console.error('Error creating review:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const getProductReviews = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+    const { page = 1, limit = 10, sortBy = 'newest', rating } = req.query;
+
+    const offset = (Number(page) - 1) * Number(limit);
+    
+    let orderClause: any = [['createdAt', 'DESC']];
+    if (sortBy === 'oldest') {
+      orderClause = [['createdAt', 'ASC']];
+    } else if (sortBy === 'rating-high') {
+      orderClause = [['rating', 'DESC'], ['createdAt', 'DESC']];
+    } else if (sortBy === 'rating-low') {
+      orderClause = [['rating', 'ASC'], ['createdAt', 'DESC']];
+    } else if (sortBy === 'helpful') {
+      orderClause = [['helpfulCount', 'DESC'], ['createdAt', 'DESC']];
+    }
+
+    const whereClause: any = { 
+      productId, 
+      status: 'approved' 
+    };
+    
+    if (rating) {
+      whereClause.rating = Number(rating);
+    }
+
+    const { rows: reviews, count } = await Review.findAndCountAll({
+      where: whereClause,
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'firstName', 'lastName', 'avatar']
+        }
+      ],
+      order: orderClause,
+      limit: Number(limit),
+      offset
+    });
+
+    // Calculate rating statistics
+    const ratingStats = await Review.findAll({
+      where: { productId, status: 'approved' },
+      attributes: [
+        'rating',
+        [Review.sequelize!.fn('COUNT', '*'), 'count']
+      ],
+      group: ['rating'],
+      raw: true
+    });
+
+    const totalReviews = await Review.count({
+      where: { productId, status: 'approved' }
+    });
+
+    const avgRating = totalReviews > 0 ? await Review.findOne({
+      where: { productId, status: 'approved' },
+      attributes: [[Review.sequelize!.fn('AVG', Review.sequelize!.col('rating')), 'average']],
+      raw: true
+    }) : { average: 0 };
+
+    return res.json({
+      success: true,
+      data: {
+        reviews,
+        statistics: {
+          totalReviews,
+          averageRating: avgRating && typeof avgRating === 'object' && 'average' in avgRating 
+            ? parseFloat(String(avgRating.average)).toFixed(1) 
+            : '0.0',
+          ratingBreakdown: {
+            5: (ratingStats.find((r: any) => r.rating === 5) as any)?.count || 0,
+            4: (ratingStats.find((r: any) => r.rating === 4) as any)?.count || 0,
+            3: (ratingStats.find((r: any) => r.rating === 3) as any)?.count || 0,
+            2: (ratingStats.find((r: any) => r.rating === 2) as any)?.count || 0,
+            1: (ratingStats.find((r: any) => r.rating === 1) as any)?.count || 0,
+          }
+        },
+        pagination: {
+          currentPage: Number(page),
+          totalPages: Math.ceil(count / Number(limit)),
+          totalItems: count,
+          itemsPerPage: Number(limit)
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching product reviews:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const getUserReviews = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    const { page = 1, limit = 10 } = req.query;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const offset = (Number(page) - 1) * Number(limit);
+
+    const { rows: reviews, count } = await Review.findAndCountAll({
+      where: { userId },
+      include: [
+        {
+          model: Product,
+          attributes: ['id', 'title', 'images', 'price']
+        }
+      ],
+      order: [['createdAt', 'DESC']],
+      limit: Number(limit),
+      offset
+    });
+
+    return res.json({
+      success: true,
+      data: {
+        reviews,
+        pagination: {
+          currentPage: Number(page),
+          totalPages: Math.ceil(count / Number(limit)),
+          totalItems: count,
+          itemsPerPage: Number(limit)
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching user reviews:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const updateReview = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { rating, title, comment, images } = req.body;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const review = await Review.findOne({
+      where: { id, userId }
+    });
+
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    // Update review
+    const updateData: any = {};
+    if (rating !== undefined) updateData.rating = rating;
+    if (title !== undefined) updateData.title = title;
+    if (comment !== undefined) updateData.comment = comment;
+    if (images !== undefined) updateData.images = images;
+    
+    // Reset status to pending if content changed
+    if (rating !== undefined || title !== undefined || comment !== undefined) {
+      updateData.status = 'pending';
+    }
+
+    await review.update(updateData);
+
+    const updatedReview = await Review.findByPk(id, {
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'firstName', 'lastName', 'avatar']
+        },
+        {
+          model: Product,
+          attributes: ['id', 'title', 'images']
+        }
+      ]
+    });
+
+    return res.json({
+      success: true,
+      message: 'Review updated successfully',
+      data: updatedReview
+    });
+  } catch (error) {
+    console.error('Error updating review:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const deleteReview = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const review = await Review.findOne({
+      where: { id, userId }
+    });
+
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    await review.destroy();
+
+    return res.json({
+      success: true,
+      message: 'Review deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting review:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const markReviewHelpful = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { helpful } = req.body;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const review = await Review.findByPk(id);
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    if (review.userId === userId) {
+      return res.status(400).json({ message: 'Cannot mark your own review as helpful' });
+    }
+
+    // Update helpful count (simplified - in production you'd track individual votes)
+    if (helpful) {
+      await review.increment('helpfulCount');
+    }
+
+    return res.json({
+      success: true,
+      message: 'Thank you for your feedback'
+    });
+  } catch (error) {
+    console.error('Error marking review helpful:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const reportReview = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { reason, details } = req.body;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const review = await Review.findByPk(id);
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    // Update review status to reported
+    await review.update({
+      status: 'reported',
+      reportReason: reason,
+      reportDetails: details
+    });
+
+    return res.json({
+      success: true,
+      message: 'Review reported successfully. Our team will review it.'
+    });
+  } catch (error) {
+    console.error('Error reporting review:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+// Admin functions
+export const moderateReview = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status, moderatorNote } = req.body;
+    const userId = req.user?.id;
+
+    if (!userId || req.user?.role !== 'admin') {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+
+    const review = await Review.findByPk(id);
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    await review.update({
+      status,
+      moderatedBy: userId,
+      moderatedAt: new Date(),
+      moderatorNote
+    });
+
+    return res.json({
+      success: true,
+      message: 'Review moderated successfully',
+      data: review
+    });
+  } catch (error) {
+    console.error('Error moderating review:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};

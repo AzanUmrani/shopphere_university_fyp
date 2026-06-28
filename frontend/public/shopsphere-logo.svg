@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="shopsphereTitle shopsphereDesc">
+  <title id="shopsphereTitle">ShopSphere Logo</title>
+  <desc id="shopsphereDesc">A stylized globe and shopping cart icon for ShopSphere.</desc>
+  <defs>
+    <linearGradient id="shopSphereGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ec4899" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="52" fill="url(#shopSphereGradient)" />
+  <path d="M42 44c0-5.5 4.5-10 10-10h16c5.5 0 10 4.5 10 10v14H42V44Z" fill="#fff" opacity="0.92" />
+  <path d="M40 78h44v6H40z" fill="#fff" opacity="0.92" />
+  <path d="M48 50h24l8 10H46l2-10Z" fill="#fff" />
+  <path d="M48 62h8v8h-8zm20 0h8v8h-8z" fill="#fff" />
+  <circle cx="52" cy="86" r="4" fill="#fff" />
+  <circle cx="76" cy="86" r="4" fill="#fff" />
+</svg>
