@@ -147,31 +147,38 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        {/* Logo */}
-        <Link to="/" className="flex items-center justify-center space-x-2.5 mb-8 group">
-          <div className="w-10 h-10 bg-gradient-to-br from-secondary-600 via-pink-600 to-primary-600 rounded-xl flex items-center justify-center shadow-sm">
-            <Sparkles className="w-5 h-5 text-white" />
+    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(236,72,153,0.16),_transparent_30%),linear-gradient(135deg,_#fff7ed_0%,_#fdf2f8_45%,_#eef2ff_100%)] px-4 py-12 transition-colors duration-200 dark:bg-[radial-gradient(circle_at_top_left,_rgba(236,72,153,0.2),_transparent_30%),linear-gradient(135deg,_#111827_0%,_#1f2937_45%,_#111827_100%)] sm:px-6 lg:px-8">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-10 top-0 h-56 w-56 rounded-full bg-primary-200/40 blur-3xl dark:bg-primary-900/20" />
+        <div className="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-secondary-200/40 blur-3xl dark:bg-secondary-900/20" />
+      </div>
+
+      <div className="relative sm:mx-auto sm:w-full sm:max-w-md">
+        <Link to="/" className="group mb-8 flex items-center justify-center space-x-2.5">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-secondary-600 via-pink-600 to-primary-600 shadow-sm">
+            <Sparkles className="h-5 w-5 text-white" />
           </div>
           <span className="text-2xl font-bold bg-gradient-to-r from-secondary-600 via-pink-600 to-primary-600 bg-clip-text text-transparent">
             ShopSphere
-            Welcome back
-          </h1>
+          </span>
+        </Link>
+
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Welcome back</h1>
           <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-            Don't have an account?{" "}
-            <Link
-              to="/register"
-              className="font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
-            >
-              Create one free
-            </Link>
+            Sign in to continue shopping, track orders, and enjoy a faster checkout experience.
           </p>
         </div>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm px-8 py-8">
+      <div className="relative mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="rounded-[28px] border border-white/70 bg-white/90 px-8 py-8 shadow-[0_20px_80px_-20px_rgba(15,23,42,0.30)] backdrop-blur-xl dark:border-gray-800/70 dark:bg-gray-900/90">
+          <div className="mb-6 rounded-2xl border border-primary-100 bg-primary-50/80 p-3 text-sm text-primary-700 dark:border-primary-900/40 dark:bg-primary-950/40 dark:text-primary-300">
+            <div className="flex items-center gap-2 font-medium">
+              <Sparkles className="h-4 w-4" />
+              Secure, fast, and personalized checkout
+            </div>
+          </div>
           {/* Social Login */}
           <div className="grid grid-cols-2 gap-3 mb-6">
             <button

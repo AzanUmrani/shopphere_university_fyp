@@ -95,32 +95,34 @@ const HomePage = () => {
       <TopBanner />
 
       {/* ── Hero ── */}
-      <section className="bg-white dark:bg-gray-950 border-b border-gray-100 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section className="relative overflow-hidden border-b border-gray-100 bg-gradient-to-br from-white via-primary-50/70 to-secondary-50 dark:border-gray-800 dark:bg-gradient-to-br dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(236,72,153,0.16),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(59,130,246,0.16),_transparent_30%)]" />
+        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
             {/* Left */}
             <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800">
-                <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>
-                <span className="text-xs font-semibold text-primary-700 dark:text-primary-400 uppercase tracking-wide">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50 px-3 py-1.5 dark:border-primary-800 dark:bg-primary-900/20">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-primary-500"></span>
+                <span className="text-xs font-semibold uppercase tracking-wide text-primary-700 dark:text-primary-400">
                   New Season Sale
                 </span>
               </div>
 
-              <h1 className="text-5xl lg:text-6xl font-black text-gray-900 dark:text-white leading-tight tracking-tight">
-                Shop With{" "}
-                <span className="text-gradient-primary">Confidence</span>
-              </h1>
+              <div className="space-y-4">
+                <h1 className="text-5xl font-black leading-tight tracking-tight text-gray-900 dark:text-white lg:text-6xl">
+                  Shop With{" "}
+                  <span className="text-gradient-primary">Confidence</span>
+                </h1>
+                <p className="max-w-xl text-lg leading-relaxed text-gray-500 dark:text-gray-400">
+                  Discover curated collections from premium brands with lightning-fast delivery,
+                  seamless checkout, and support that feels personal.
+                </p>
+              </div>
 
-              <p className="text-lg text-gray-500 dark:text-gray-400 max-w-md leading-relaxed">
-                Discover curated collections from premium brands. Fast shipping,
-                secure payments, and amazing customer support.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row">
                 <Link to="/products">
                   <Button size="lg" className="w-full sm:w-auto">
-                    <ShoppingCart className="w-4 h-4 mr-2" />
+                    <ShoppingCart className="mr-2 h-4 w-4" />
                     Start Shopping
                   </Button>
                 </Link>
@@ -130,45 +132,51 @@ const HomePage = () => {
                   onClick={() => setIsVideoModalOpen(true)}
                   className="w-full sm:w-auto"
                 >
-                  <Play className="w-4 h-4 mr-2" />
+                  <Play className="mr-2 h-4 w-4" />
                   See Demo
                 </Button>
               </div>
 
-              {/* Trust signals */}
-              <div className="flex flex-wrap gap-4 pt-2">
+              <div className="flex flex-wrap gap-3 pt-2">
                 {[
-                  "Free shipping over $100",
-                  "60-day returns",
-                  "Secure checkout",
-                ].map((item) => (
-                  <div key={item} className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-                    <CheckCircle className="w-4 h-4 text-secondary-500 flex-shrink-0" />
-                    {item}
-                  </div>
-                ))}
+                  { label: "Free shipping over $100", icon: Truck },
+                  { label: "60-day returns", icon: RotateCcw },
+                  { label: "Secure checkout", icon: Shield },
+                ].map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div
+                      key={item.label}
+                      className="flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-3 py-2 text-sm text-gray-600 shadow-sm dark:border-gray-800 dark:bg-gray-900/70 dark:text-gray-300"
+                    >
+                      <Icon className="h-4 w-4 text-secondary-500" />
+                      {item.label}
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
             {/* Right - Image Slider */}
             <div className="relative hidden lg:block">
-              <div className="rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-md">
-                <FadingSlider
-                  images={heroImages}
-                  autoPlay={true}
-                  autoPlayInterval={5000}
-                  showDots={false}
-                  className="h-full w-full"
-                  transitionDuration={1200}
-                />
+              <div className="rounded-[28px] border border-white/80 bg-white/80 p-2 shadow-[0_20px_80px_-25px_rgba(15,23,42,0.35)] backdrop-blur dark:border-gray-800 dark:bg-gray-900/80">
+                <div className="overflow-hidden rounded-[22px] border border-gray-200 dark:border-gray-800">
+                  <FadingSlider
+                    images={heroImages}
+                    autoPlay={true}
+                    autoPlayInterval={5000}
+                    showDots={false}
+                    className="h-full w-full"
+                    transitionDuration={1200}
+                  />
+                </div>
               </div>
 
-              {/* Rating badge */}
-              <div className="absolute -bottom-4 -left-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-3.5 shadow-sm">
+              <div className="absolute -bottom-5 -left-5 rounded-2xl border border-gray-200 bg-white p-3.5 shadow-lg dark:border-gray-800 dark:bg-gray-900">
                 <div className="flex items-center gap-2.5">
                   <div className="flex">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 text-amber-400 fill-current" />
+                      <Star key={i} className="h-3.5 w-3.5 fill-current text-amber-400" />
                     ))}
                   </div>
                   <div>
@@ -176,6 +184,13 @@ const HomePage = () => {
                     <div className="text-xs text-gray-400 dark:text-gray-500">50K+ reviews</div>
                   </div>
                 </div>
+              </div>
+
+              <div className="absolute -right-5 -top-5 rounded-2xl border border-primary-100 bg-primary-50 px-4 py-3 text-left shadow-lg dark:border-primary-900/40 dark:bg-primary-950/40">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary-600 dark:text-primary-300">
+                  Curated picks
+                </div>
+                <div className="text-sm font-semibold text-gray-900 dark:text-white">Fresh arrivals weekly</div>
               </div>
             </div>
           </div>
