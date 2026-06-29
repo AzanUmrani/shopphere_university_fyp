@@ -63,25 +63,25 @@ const FAQPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-200">
+    <div className="min-h-screen bg-[linear-gradient(135deg,_#fff7ed_0%,_#fdf2f8_45%,_#f8fafc_100%)] dark:bg-[linear-gradient(135deg,_#111827_0%,_#1f2937_45%,_#0f172a_100%)] transition-colors duration-200">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="border-b border-gray-200 bg-white/80 backdrop-blur dark:border-gray-800 dark:bg-gray-900/80">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="w-20 h-20 bg-white/20 dark:bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <HelpCircle className="w-12 h-12 text-white" />
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary-600 to-pink-600 shadow-lg shadow-secondary-500/20">
+              <HelpCircle className="h-12 w-12 text-white" />
             </div>
-            <h1 className="text-4xl font-bold mb-4">
+            <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
               Frequently Asked Questions
             </h1>
-            <p className="text-secondary-100 dark:text-secondary-200/80 text-lg">
+            <p className="mx-auto max-w-2xl text-lg text-gray-600 dark:text-gray-300">
               Find answers to common questions about our products and services.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="space-y-4">
           {faqData.map((faq) => (
             <Card

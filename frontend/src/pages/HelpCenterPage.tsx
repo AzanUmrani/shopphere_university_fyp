@@ -212,38 +212,38 @@ const HelpCenterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-200">
+    <div className="min-h-screen bg-[linear-gradient(135deg,_#fff7ed_0%,_#fdf2f8_45%,_#f8fafc_100%)] dark:bg-[linear-gradient(135deg,_#111827_0%,_#1f2937_45%,_#0f172a_100%)] transition-colors duration-200">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="border-b border-gray-200 bg-white/80 backdrop-blur dark:border-gray-800 dark:bg-gray-900/80">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="w-20 h-20 bg-white/20 dark:bg-black/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <HelpCircle className="w-12 h-12 text-white" />
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-600 to-secondary-600 shadow-lg shadow-primary-500/20">
+              <HelpCircle className="h-12 w-12 text-white" />
             </div>
-            <h1 className="text-4xl font-bold mb-4">Help Center</h1>
-            <p className="text-secondary-100 text-lg max-w-2xl mx-auto">
+            <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">Help Center</h1>
+            <p className="mx-auto max-w-2xl text-lg text-gray-600 dark:text-gray-300">
               Find answers to common questions, tutorials, and get support when
               you need it.
             </p>
           </div>
 
           {/* Search Bar */}
-          <div className="max-w-2xl mx-auto mt-8">
+          <div className="mx-auto mt-8 max-w-2xl">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
+              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
               <input
                 type="text"
                 placeholder="Search for help articles, FAQs, and guides..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-6 py-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-white/30 dark:border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-white/50 text-gray-900 dark:text-white placeholder-gray-500"
+                className="w-full rounded-2xl border border-gray-200 bg-white/90 py-4 pl-12 pr-6 text-gray-900 placeholder-gray-500 outline-none ring-0 focus:border-primary-400 dark:border-gray-700 dark:bg-gray-800/90 dark:text-white"
               />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         {/* Quick Actions */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
