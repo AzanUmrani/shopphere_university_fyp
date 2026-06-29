@@ -113,7 +113,7 @@ const ProductsPage = () => {
   return (
     <div className="min-h-screen bg-[linear-gradient(135deg,_#fff7ed_0%,_#fdf2f8_45%,_#f8fafc_100%)] dark:bg-[linear-gradient(135deg,_#111827_0%,_#1f2937_45%,_#0f172a_100%)] transition-colors duration-200">
       {/* Page Header */}
-      <div className="border-b border-gray-100 bg-white/80 backdrop-blur dark:border-gray-800 dark:bg-gray-950/70">
+      <div className="border-b border-gray-100 bg-white/85 backdrop-blur-xl dark:border-gray-800 dark:bg-gray-950/80">
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
             <div>
@@ -168,7 +168,7 @@ const ProductsPage = () => {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <aside className={`lg:w-60 space-y-6 ${showFilters ? "block" : "hidden lg:block"}`}>
-            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 sticky top-20">
+            <div className="sticky top-20 rounded-[22px] border border-gray-200 bg-white/95 p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900/95">
               <div className="flex items-center gap-2 mb-5">
                 <Filter className="w-4 h-4 text-gray-400" />
                 <h2 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">

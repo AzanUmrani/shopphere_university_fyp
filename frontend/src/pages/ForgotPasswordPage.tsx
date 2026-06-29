@@ -94,11 +94,16 @@ const ForgotPasswordPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors duration-200">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(236,72,153,0.16),_transparent_30%),linear-gradient(135deg,_#fff7ed_0%,_#fdf2f8_45%,_#eef2ff_100%)] px-4 py-12 transition-colors duration-200 dark:bg-[radial-gradient(circle_at_top_left,_rgba(236,72,153,0.2),_transparent_30%),linear-gradient(135deg,_#111827_0%,_#1f2937_45%,_#111827_100%)] sm:px-6 lg:px-8">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-10 top-0 h-56 w-56 rounded-full bg-primary-200/40 blur-3xl dark:bg-primary-900/20" />
+        <div className="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-secondary-200/40 blur-3xl dark:bg-secondary-900/20" />
+      </div>
+
+      <div className="relative sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center">
-          <div className="w-12 h-12 bg-primary-50 dark:bg-primary-900/30 border border-primary-100 dark:border-primary-800 rounded-xl flex items-center justify-center mx-auto mb-5">
-            <Mail className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+          <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-primary-100 bg-primary-50 dark:border-primary-800 dark:bg-primary-900/30">
+            <Mail className="h-6 w-6 text-primary-600 dark:text-primary-400" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
             Reset Your Password
@@ -109,8 +114,8 @@ const ForgotPasswordPage = () => {
         </div>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <Card className="px-8 py-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm">
+      <div className="relative mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <Card className="rounded-[28px] border border-white/70 bg-white/90 px-8 py-8 shadow-[0_20px_80px_-20px_rgba(15,23,42,0.30)] backdrop-blur-xl dark:border-gray-800/70 dark:bg-gray-900/90">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <Input
               label="Email address"
