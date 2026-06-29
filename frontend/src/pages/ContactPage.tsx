@@ -78,13 +78,16 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-200">
+    <div className="min-h-screen bg-[linear-gradient(135deg,_#fff7ed_0%,_#fdf2f8_45%,_#f8fafc_100%)] dark:bg-[linear-gradient(135deg,_#111827_0%,_#1f2937_45%,_#0f172a_100%)] transition-colors duration-200">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="border-b border-gray-200 bg-white/80 backdrop-blur dark:border-gray-800 dark:bg-gray-900/80">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
-            <p className="text-secondary-100 dark:text-secondary-200/80 text-lg max-w-2xl mx-auto">
+            <div className="mb-4 inline-flex items-center rounded-full border border-secondary-200 bg-secondary-50 px-3 py-1 text-sm font-semibold text-secondary-700 dark:border-secondary-900/40 dark:bg-secondary-950/40 dark:text-secondary-300">
+              Support hub
+            </div>
+            <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white md:text-5xl">Contact Us</h1>
+            <p className="mx-auto max-w-2xl text-lg text-gray-600 dark:text-gray-300">
               We're here to help! Get in touch with our support team for any
               inquiries or feedback.
             </p>
@@ -92,8 +95,8 @@ const ContactPage = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
           {/* Contact Form */}
           <div className="order-2 lg:order-1">
             <Card className="p-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm">

@@ -79,27 +79,38 @@ const ProfilePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-200">
+    <div className="min-h-screen bg-[linear-gradient(135deg,_#fff7ed_0%,_#fdf2f8_45%,_#f8fafc_100%)] dark:bg-[linear-gradient(135deg,_#111827_0%,_#1f2937_45%,_#0f172a_100%)] transition-colors duration-200">
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="mb-8 rounded-[28px] border border-white/70 bg-white/80 p-6 shadow-[0_20px_80px_-25px_rgba(15,23,42,0.25)] backdrop-blur dark:border-gray-800/70 dark:bg-gray-900/80">
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Profile</h1>
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Manage your personal details, security, and notification preferences in one place.</p>
+          </div>
+          <div className="rounded-full border border-primary-100 bg-primary-50 px-3 py-1 text-sm font-medium text-primary-700 dark:border-primary-900/40 dark:bg-primary-950/40 dark:text-primary-300">
+            Personal workspace
+          </div>
+        </div>
+      </div>
       <div className="flex flex-col md:flex-row gap-8">
         {/* Sidebar Navigation */}
         <div className="w-full md:w-72 shrink-0">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden shadow-sm">
-            <div className="p-6 border-b border-gray-100 dark:border-gray-700 text-center">
+          <div className="overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <div className="border-b border-gray-100 p-6 text-center dark:border-gray-700">
               <div className="relative inline-block">
                 <img 
                   src={user.avatar || `https://ui-avatars.com/api/?name=${user.firstName}`} 
-                  className="w-24 h-24 rounded-2xl object-cover border-4 border-gray-50 dark:border-gray-900" 
+                  className="h-24 w-24 rounded-2xl border-4 border-gray-50 object-cover dark:border-gray-900" 
                   alt="Profile"
                 />
-                <button className="absolute -bottom-2 -right-2 p-2 bg-primary-600 text-white rounded-xl shadow-lg hover:bg-primary-700 transition-colors">
+                <button className="absolute -bottom-2 -right-2 rounded-xl bg-primary-600 p-2 text-white shadow-lg transition-colors hover:bg-primary-700">
                   <Camera size={16} />
                 </button>
               </div>
               <h2 className="mt-4 font-bold text-gray-900 dark:text-white">{user.firstName} {user.lastName}</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400 text-truncate">{user.email}</p>
+              <p className="truncate text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
             </div>
-            <nav className="p-4 space-y-1">
+            <nav className="space-y-1 p-4">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -123,7 +134,7 @@ const ProfilePage = () => {
 
         {/* Tab Content Area */}
         <div className="flex-1">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-8 shadow-sm">
+          <div className="rounded-[24px] border border-gray-100 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-gray-800">
             
             {/* PUBLIC PROFILE TAB */}
             {activeTab === 'profile' && (
