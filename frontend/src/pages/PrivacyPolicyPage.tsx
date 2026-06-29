@@ -3,27 +3,27 @@ import Card from "../components/ui/Card";
 
 const PrivacyPolicyPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-secondary-50 via-pink-50 to-primary-50">
+    <div className="min-h-screen bg-[linear-gradient(135deg,_#fff7ed_0%,_#fdf2f8_45%,_#f8fafc_100%)] dark:bg-[linear-gradient(135deg,_#111827_0%,_#1f2937_45%,_#0f172a_100%)] transition-colors duration-200">
       {/* Header */}
-      <div className="bg-gradient-to-r from-secondary-600 via-pink-600 to-primary-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="border-b border-gray-200 bg-white/80 backdrop-blur dark:border-gray-800 dark:bg-gray-900/80">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Shield className="w-12 h-12 text-white" />
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-600 to-secondary-600 shadow-lg shadow-primary-500/20">
+              <Shield className="h-12 w-12 text-white" />
             </div>
-            <h1 className="text-4xl font-bold mb-4">Privacy Policy</h1>
-            <p className="text-secondary-100 text-lg">
+            <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">Privacy Policy</h1>
+            <p className="mx-auto max-w-2xl text-lg text-gray-600 dark:text-gray-300">
               Your privacy is important to us. Learn how we protect and use your
               information.
             </p>
-            <p className="text-secondary-200 text-sm mt-2">
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
               Last updated: August 2, 2025
             </p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="space-y-8">
           {/* Overview */}
           <Card className="p-8 bg-white/70 backdrop-blur-xl border border-white/30 shadow-xl">
