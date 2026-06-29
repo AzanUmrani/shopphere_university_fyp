@@ -111,19 +111,26 @@ const ProductsPage = () => {
   }, [searchQuery]);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 transition-colors duration-200">
+    <div className="min-h-screen bg-[linear-gradient(135deg,_#fff7ed_0%,_#fdf2f8_45%,_#f8fafc_100%)] dark:bg-[linear-gradient(135deg,_#111827_0%,_#1f2937_45%,_#0f172a_100%)] transition-colors duration-200">
       {/* Page Header */}
-      <div className="bg-white dark:bg-gray-950 border-b border-gray-100 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-            Products
-          </h1>
-          <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
-            Discover our curated collection of high-quality products
-          </p>
+      <div className="border-b border-gray-100 bg-white/80 backdrop-blur dark:border-gray-800 dark:bg-gray-950/70">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h1 className="mb-1 text-3xl font-bold text-gray-900 dark:text-white">
+                Products
+              </h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Discover our curated collection of high-quality products
+              </p>
+            </div>
+            <div className="rounded-full border border-primary-100 bg-primary-50 px-3 py-1 text-sm font-medium text-primary-700 dark:border-primary-900/40 dark:bg-primary-950/40 dark:text-primary-300">
+              Curated picks updated daily
+            </div>
+          </div>
 
           {/* Search */}
-          <div className="max-w-xl relative">
+          <div className="relative max-w-xl">
             <Input
               value={localSearchQuery}
               onChange={(e) => setLocalSearchQuery(e.target.value)}
